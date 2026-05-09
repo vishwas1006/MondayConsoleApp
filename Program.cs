@@ -31,4 +31,19 @@ HttpResponseMessage response = await client.PostAsync("https://api.monday.com/v2
 
 string result = await response.Content.ReadAsStringAsync();
 
-Console.WriteLine(result);
+//Console.WriteLine(result);
+
+using JsonDocument document = JsonDocument.Parse(result);
+
+var boards = document.RootElement.
+                GetProperty("data").GetProperty("boards");
+
+foreach(var board in boards.EnumerateArray())
+{
+    string id = board.GetProperty("id").GetString();
+    string name = board.GetProperty("name").GetString();
+
+    Console.WriteLine($"Board ID: {id}");
+    Console.WriteLine($"Bpard Name:{name}");
+    Console.WriteLine("------------------------");
+}

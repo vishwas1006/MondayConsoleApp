@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MondayConsoleApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f0d6d2723bfd46ee23690752d278363cca94f8f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+079b9c20eeae928eaa3b3cb66f4b9b5a1cf230e9")]
 [assembly: System.Reflection.AssemblyProductAttribute("MondayConsoleApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MondayConsoleApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
