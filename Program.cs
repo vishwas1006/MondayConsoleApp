@@ -1,49 +1,36 @@
-﻿using System.Text;
-using System.Text.Json;
-using DotNetEnv;
+﻿using DotNetEnv;
+using MondayConsoleApp.Operations;
+using MondayConsoleApp.Services;
 
 Env.Load();
 
 string? apiToken = Environment.GetEnvironmentVariable("MONDAY_API_TOKEN");
 
-using HttpClient client = new();
+MondayClient mondayClient = new MondayClient(apiToken!);
 
-client.DefaultRequestHeaders.Add("Authorization", apiToken);
-
-string query = @"
+Dictionary<int, IOperation> operations = new()
 {
-    boards{
-        id
-        name
-    }
-}";
-
-var requestBody = new
-{
-    query = query
+    {1, new GetBoardsOperation(mondayClient) },
+    {2, new GetBoardByIdOperation(mondayClient) },
+    { 3, new CreateItemOperation(mondayClient) },
+    {4, new ListItemsOperation(mondayClient) },
+    {5, new UpdateItemNameOperation(mondayClient) }
 };
 
-string jsonBody = JsonSerializer.Serialize(requestBody);
+Console.WriteLine("1.Get Boards");
+Console.WriteLine("2.Get Board By Id");
+Console.WriteLine("3.Create Item");
+Console.WriteLine("4.List Item Operation");
+Console.WriteLine("5.Update Item Name");
+Console.WriteLine("Choose Option:");
 
-var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+int choice = Convert.ToInt32(Console.ReadLine());
 
-HttpResponseMessage response = await client.PostAsync("https://api.monday.com/v2", content);
-
-string result = await response.Content.ReadAsStringAsync();
-
-//Console.WriteLine(result);
-
-using JsonDocument document = JsonDocument.Parse(result);
-
-var boards = document.RootElement.
-                GetProperty("data").GetProperty("boards");
-
-foreach(var board in boards.EnumerateArray())
+if (operations.ContainsKey(choice))
 {
-    string id = board.GetProperty("id").GetString();
-    string name = board.GetProperty("name").GetString();
-
-    Console.WriteLine($"Board ID: {id}");
-    Console.WriteLine($"Bpard Name:{name}");
-    Console.WriteLine("------------------------");
+    await operations[choice].ExecuteAsync();
+}
+else
+{
+    Console.WriteLine("Invalid Choice");
 }
